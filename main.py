@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import filedialog
 from pygame import mixer
 import os
 
@@ -9,9 +10,13 @@ class PlayerMusic:
         self.root.title("Music Player")
         self.root.geometry("500x300")
         mixer.init()
+
         self.musiclist = Listbox(self.root, bg="black", fg="white", width=100, height=15)
         self.musiclist.pack()
 
+        self.songs = []
+        self.currentsong = ""
+        pause = False
     def buttons(self):
         self.play_img = PhotoImage(file="./icons/play.png", width=50, height=50)
         self.pause_img = PhotoImage(file="./icons/pause.png", width=50, height=50)
@@ -36,7 +41,26 @@ class PlayerMusic:
         pause_btn.grid(row=0, column=2, padx=7, pady=10)
         back_btn.grid(row=0, column=0, padx=7, pady=10)
         next_btn.grid(row=0, column=3, padx=7, pady=10)
+
+    def menu(self):
+        menu_choice = Menu(self.root)
+        self.root.config(menu=menu_choice)
+        organize_menu = Menu(menu_choice, tearoff=False)
+        organize_menu.add_command(label="Selectionner un Dossier", command=self.play_song())
+        menu_choice.add_cascade(label="Organize", menu=organize_menu)
+
+    def play_song(self):
+        self.root.directory = filedialog.askdirectory()
+        for song in os.listdir(self.root.directory):
+            name, ext = os.path.splitext(song)
+            if ext == '.mp3':
+                self.songs.append(song)
+        for song in songs:
+            self.musiclist.insert(END, song)
+        self.musiclist.selection_set(0)
+        self.currentsong = self.songs[self.musiclist.curselection()[0]]
     def run(self):
+        self.menu()
         self.buttons()
         self.root.mainloop()
 
