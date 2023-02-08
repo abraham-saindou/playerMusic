@@ -10,22 +10,25 @@ class PlayerMusic:
         self.root = Tk()
         self.root.title("Music Player")
         self.root.geometry("650x550")
+        self.root.config(bg="snow3")
         mixer.init()
 
         self.musiclist = Listbox(self.root, bg="purple", fg="white", width=100, height=15)
         self.musiclist.pack()
-        self.frame = Frame(self.root, bg="white")
+        self.frame = Frame(self.root, bg="snow3")
         self.frame.pack()
+        self.tip = Label(text="Pour supprimer une musique,\nselectionner un son de la liste \n puis cliquer supprimer\n dans le menu file")
+        self.tip.place(x=2, y=320)
         self.vol = DoubleVar()
         self.songs = []
         self.currentsong = ""
         self.paused = self.random = self.ticked = False
     def buttons(self):
         #  Frames
-        self.btn_frame = Frame(self.frame)
-        self.btn_frame.grid(row=0, column=0, pady=178)
-        self.slider_frame = Frame(self.root)
-        self.slider_frame.place(x=530, y=320)
+        self.btn_frame = Frame(self.frame, bg="snow3", highlightbackground="black", highlightthickness=2)
+        self.btn_frame.grid(row=0, column=0, pady=120)
+        self.slider_frame = Frame(self.root, bg="snow3")
+        self.slider_frame.place(x=240, y=330)
         #  Buttons Icons
         self.play_img = PhotoImage(file="./icons/play.png", width=50, height=50)
         self.pause_img = PhotoImage(file="./icons/pause.png", width=50, height=50)
@@ -37,12 +40,12 @@ class PlayerMusic:
         self.loopoff_img = PhotoImage(file="./icons/loop-off.png", width=50, height=50)
         self.loopon_img = PhotoImage(file="./icons/loop-on.png", width=50, height=50)
         #  Buttons
-        self.play_btn = Button(self.btn_frame, image=self.play_img, borderwidth=0, command=self.play_music)
-        self.pause_btn = Button(self.btn_frame, image=self.pause_img, borderwidth=0, command=self.pause_music)
-        self.stop_btn = Button(self.btn_frame, image=self.stop_img, borderwidth=0, command=self.stop_music)
-        self.back_btn = Button(self.btn_frame, image=self.back_img, borderwidth=0, command=self.back_music)
-        self.next_btn = Button(self.btn_frame, image=self.next_img, borderwidth=0, command=self.next_music)
-        self.loop_btn = Button(self.btn_frame, image=self.loopoff_img, borderwidth=0, command=self.loop)
+        self.play_btn = Button(self.btn_frame, image=self.play_img, bg="snow3", borderwidth=0, command=self.play_music)
+        self.pause_btn = Button(self.btn_frame, image=self.pause_img, bg="snow3", borderwidth=0, command=self.pause_music)
+        self.stop_btn = Button(self.btn_frame, image=self.stop_img, bg="snow3", borderwidth=0, command=self.stop_music)
+        self.back_btn = Button(self.btn_frame, image=self.back_img, bg="snow3", borderwidth=0, command=self.back_music)
+        self.next_btn = Button(self.btn_frame, image=self.next_img, bg="snow3", borderwidth=0, command=self.next_music)
+        self.loop_btn = Button(self.btn_frame, image=self.loopoff_img, bg="snow3", borderwidth=0, command=self.loop)
 
         self.play_btn.grid(row=0, column=1, padx=7, pady=10)
         self.pause_btn.grid(row=0, column=2, padx=7, pady=10)
@@ -51,18 +54,15 @@ class PlayerMusic:
         self.next_btn.grid(row=0, column=3, padx=7, pady=10)
         self.loop_btn.grid(row=0, column=5, padx=7, pady=10)
     # Soundbar
-        self.label_up = Label(self.slider_frame, image=self.volup_img)
-        self.label_down = Label(self.slider_frame, image=self.voldown_img)
-        self.label_up.grid(row=0, column=0)
-        self.label_down.grid(row=2, column=0)
-        self.slider_volume = Scale(self.slider_frame, from_=100, to=0, orient=VERTICAL, resolution=2, length=120,
-                                   command=self.volume, variable=self.vol, label="Volume")
+        self.slider_volume = Scale(self.slider_frame, from_=0, to=100, orient=HORIZONTAL, resolution=2, length=180,
+                                   command=self.volume, variable=self.vol, label="Volume", bg="snow3",)
         self.slider_volume.set(100)
+
         self.slider_volume.grid(row=1, column=0)
 
     def volume(self, p):
-        self.track = self.slider_volume.get()/100
-        mixer.music.set_volume(self.track)
+        track = self.slider_volume.get()/100
+        mixer.music.set_volume(track)
 
     def menu(self):
         #  Menu
@@ -128,6 +128,7 @@ class PlayerMusic:
 
     def stop_music(self):
         mixer.music.stop()
+
     def next_music(self):
         try:  # Set the next index of musisclist as currentsong
 
